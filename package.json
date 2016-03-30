@@ -4,7 +4,8 @@
   "description": "Serviço para localização de ponto de interesse (PI) através de posicionamento geográfico.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm install && node app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/thiagobitencourt/xy-inc/issues"
   },
-  "homepage": "https://github.com/thiagobitencourt/xy-inc#readme"
+  "homepage": "https://github.com/thiagobitencourt/xy-inc#readme",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "cors": "^2.7.1",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.10",
+    "q": "^1.4.1"
+  }
 }

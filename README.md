@@ -30,7 +30,5 @@ Dado o ponto de referÃªncia (x=20, y=10) indicado pelo receptor GPS, e uma distÃ
 ```sh
 $ git clone https://github.com/thiagobitencourt/xy-inc
 $ cd xy-inc
-$ npm install
-$ grunt
-$ node app.js
+$ npm start
 ```
