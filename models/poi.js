@@ -1,8 +1,8 @@
-'use strict'
 /**
   Author: Thiago Bitencourt
   Description: Model definition using mongoose.
 */
+'use strict'
 var mongoose = require('mongoose');
 var q = require('q');
 //Validate value x and y before insert, value can't be negative.
