@@ -20,9 +20,15 @@ var setRoutes = function(){
 
 	//Same simple code for all responses. Using factory to encapsulate the response (res) object.
 	var responseHandlerFactory = function(res) {
+		var _res = res;
+		var _callback = function(err, result) {
+			var code = err ? err.code : result.code;
+			var message = err ? err.message : result.message;
+			console.log(code + ": " + message);
+			return _res.status(code).send(message);
+		};
 		return {
-			success: r => res.status(r.code).send(r.message),
-			error: err => res.status(err.code).send(err.message),
+			callback: _callback,
 			invalidId: () => res.status(400).send('Invalid ID')
 		}
 	};
@@ -30,9 +36,7 @@ var setRoutes = function(){
 	//GET Method
 	this.router.get(poi, function(req, res){
 		var handler = responseHandlerFactory(res);
-		poiController.getAll(req.params)
-		.then(handler.success) //Success
-		.catch(handler.error); //Error
+		poiController.getAll(req.query, handler.callback);
 	});
 	//GET by ID Method
 	this.router.get(poiId, function(req, res){
@@ -41,16 +45,12 @@ var setRoutes = function(){
 		if (!validateId.isIdValid(req.params.id))
 			return handler.invalidId();
 
-		poiController.getOne(req.params.id)
-		.then(handler.success) //Success
-		.catch(handler.error); //Error
+		poiController.getOne(req.params.id, handler.callback);
 	});
 	//POST method
 	this.router.post(poi, function(req, res){
 		var handler = responseHandlerFactory(res);
-		poiController.save(req.body)
-		.then(handler.success) //Success
-		.catch(handler.error); //Error
+		poiController.save(req.body, handler.callback);
 	});
 	//PUT method
 	this.router.put(poiId, function(req, res){
@@ -59,9 +59,7 @@ var setRoutes = function(){
 		if (!validateId.isIdValid(req.params.id))
 			return handler.invalidId();
 
-		poiController.update(req.params.id, req.body)
-		.then(handler.success) //Success
-		.catch(handler.error); //Error
+		poiController.update(req.params.id, req.body, handler.callback);
 	});
 	//DELETE method
 	this.router.delete(poiId, function(req, res){
@@ -70,9 +68,7 @@ var setRoutes = function(){
 		if (!validateId.isIdValid(req.params.id))
 			return handler.invalidId();
 
-		poiController.remove(req.param.id)
-		.then(handler.success) //Success
-		.catch(handler.error); //Error
+		poiController.remove(req.params.id, handler.callback);
 	});
 }
 
