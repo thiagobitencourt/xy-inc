@@ -6,8 +6,6 @@
 */
 'use strict';
 var PoiModel = require(__base + 'models/poi');
-var q = require('q');
-
 /**
   All the return objects follow this pattern:
   {
@@ -27,19 +25,27 @@ var poiController = function() {
       500 (Internal Server Error) for internal errors;
   */
   this.getAll = function(params, callback) {
-    var deferred = q.defer();
-    // if (!params.x || !params.y || !params.d-max)
-    //   return deferred.reject({code: 400, message: 'Parameters missing'});
-    //TODO: parei aqui.
-    var query = {};
+    var query = params.q || {};
+    var cb = function(err, result) {
+      if (err) return callback({code: 500, message: 'Internal Error: ' + err.toString()});
+
+      callback(null, {code: 200, message: result});
+    };
+    //If there are one parameter (x or y) the other must also be informed. Invalid, otherwise.
+    if (params.x || params.y) {
+      if (!params.x || !params.y) {
+        var missingP = params.x ? 'y' : 'x';
+        return callback({code: 400, message: "Missing parameter " + missingP});
+      }
+      var dmax = params.dmax ? params.dmax : 10; //Default max distanve.
+      var obj = {x: params.x, y: params.y, dmax: dmax, query: query || null};
+      return PoiModel.getPois(obj, cb);
+    }
+    //If there are no x and y parameters procede with the default quering
     PoiModel.find()
     .where(query)
     .select({__v: 0})
-    .exec(function(err, result){
-        if (err) return deferred.reject({code: 500, message: 'Internal Error: ' + err.toString()});
-        deferred.resolve({code: 200, message: result});
-    });
-    return deferred.promise;
+    .exec(cb);
   };
 
   /**
@@ -50,17 +56,15 @@ var poiController = function() {
       404 (Not Found) for unexistent ID;
       500 (Internal Server Error) for internal errors;
   */
-  this.getOne = function(id) {
-    var deferred = q.defer();
+  this.getOne = function(id, callback) {
     PoiModel.findOne({_id: id})
     .select({__v: 0})
     .exec(function(err, result){
-        if (err) return deferred.reject({code: 500, message: 'Internal Error: ' + err.toString()});
+        if (err) return callback({code: 500, message: 'Internal Error: ' + err.toString()});
         if (!result)
-          return deferred.reject({code: 404, message: 'ID Not Found'});
-        deferred.resolve({code: 200, message: result});
+          return callback({code: 404, message: 'ID Not Found'});
+        callback(null, {code: 200, message: result});
     });
-    return deferred.promise;
   };
 
   /**
@@ -72,8 +76,7 @@ var poiController = function() {
       400 (Bad Request) for any object violation;
       500 (Internal Server Error) for internal errors;
   */
-  this.save = function(poi) {
-    var deferred = q.defer();
+  this.save = function(poi, callback) {
     var newPoi = new PoiModel(poi);
     newPoi.save(function(err, p) {
       if (err) {
@@ -84,11 +87,10 @@ var poiController = function() {
             errMsg = {code: 400, message: 'Coordinates already into database'};
           else
             errMsg = {code: 400, message: 'Error: ' + err.toString()};
-        return deferred.reject(errMsg);
+        return callback(errMsg);
       }
-      deferred.resolve({code: 200, message: 'Object successfully created'});
+      callback(null, {code: 200, message: 'Object successfully created'});
     });
-    return deferred.promise;
   };
 
   /**
@@ -100,13 +102,11 @@ var poiController = function() {
       404 (Bad Request) for unexistent ID;
       500 (Internal Server Error) for internal errors;
   */
-  this.update = function(id, poi) {
-    var deferred = q.defer();
-    PoiModel.secureUpdate(id, poi)
-    .then(function() {
-      deferred.resolve({code: 200, message: "Object successfully updated"});
+  this.update = function(id, poi, callback) {
+    PoiModel.secureUpdate(id, poi, function(err) {
+      if (err) return callback(err);
+      callback(null, {code: 200, message: "Object successfully updated"});
     });
-    return deferred.promise;
   };
 
   /**
@@ -117,20 +117,18 @@ var poiController = function() {
       404 (Bad Request) for unexisting ID;
       500 (Internal Server Error) for internal errors;
   */
-  this.remove = function(id) {
-    var deferred = q.defer();
+  this.remove = function(id, callback) {
     PoiModel.findOne()
     .where({_id: id})
     .exec(function(err, result){
-        if (err) return deferred.reject({code: 500, message: 'Internal Error: ' + err.toString()});
+        if (err) return callback({code: 500, message: 'Internal Error: ' + err.toString()});
         if (!result)
-          return deferred.reject({code: 404, message: 'ID Not Found'});
+          return callback({code: 404, message: 'ID Not Found'});
         result.remove(function(err, r) {
-          if (err) return deferred.reject({code: 500, message: 'Internal Error on Remove: ' + err.toString()});
-          deferred.resolve({code: 200, message: "Object successfully removed"});
+          if (err) return callback({code: 500, message: 'Internal Error on Remove: ' + err.toString()});
+          callback(null, {code: 200, message: "Object successfully removed"});
         });
     });
-    return deferred.promise;
   };
 };
 

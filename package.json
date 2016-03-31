@@ -4,7 +4,7 @@
   "description": "Serviço para localização de ponto de interesse (PI) através de posicionamento geográfico.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/mocha",
     "start": "npm install && node app.js"
   },
   "repository": {
@@ -23,5 +23,9 @@
     "express": "^4.13.4",
     "mongoose": "^4.4.10",
     "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
   }
 }
