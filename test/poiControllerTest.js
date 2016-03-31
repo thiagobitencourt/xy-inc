@@ -75,4 +75,112 @@ describe("poiController", function() {
        });
      });
   }); //Close describe for save
+
+  describe("#retrieve", function() {
+    it('Should return error for missing parameter x', function(done) {
+      poiController.getAll({x: 1}, function(err) {
+        expect(err).not.to.be.null;
+        expect(err.code).to.be.equal(400);
+        done();
+      });
+    });
+
+    it('Should return error for missing parameter y', function(done) {
+      poiController.getAll({y: 2}, function(err) {
+        expect(err).not.to.be.null;
+        expect(err.code).to.be.equal(400);
+        done();
+      });
+    });
+
+    it('Should get all names for points of interest', function(done) {
+      poiController.getAll({x: 20, y: 10, dmax: 10}, function(err, result) {
+        if (err) throw new Error(err.message);
+        var arr = result.message;
+        expect(arr).to.have.length.of.at.least(4);
+        done();
+      });
+    });
+
+    it('Should get an array of objects from the database', function(done) {
+      poiController.getAll({}, function(err, result) {
+        if (err) throw new Error(err.message);
+        var arr = result.message;
+        expect(arr).to.have.length.of.at.least(1);
+        done();
+      });
+    });
+
+    it('Should get one object by its name', function(done) {
+      poiController.getAll({q: {nome: obj.nome}}, function(err, result) {
+        if (err) throw new Error(err.message);
+        var arr = result.message;
+        expect(arr).to.have.length.of.at.least(1);
+        expect(arr[0].nome).to.be.equal(obj.nome);
+        obj._id = arr[0]._id; //get the current ID to use later
+        done();
+      });
+    });
+
+    it('Should get one object by its ID', function(done) {
+        poiController.getOne(obj._id, function(err, result) {
+          if (err) throw new Error(err.message);
+          expect(result.message.nome).to.be.equal(obj.nome);
+          done();
+        });
+    });
+
+    it('Should not found the object', function(done) {
+      poiController.getOne(randomId, function(err) {
+        expect(err).not.to.be.null;
+        expect(err.code).to.be.equal(404);
+        done();
+      });
+    });
+  }); //Closse describe for retrieve
+
+  describe("#updates", function() {
+      it('Should successfully update an existing object', function(done) {
+        obj.x = 8989898; obj.y = 45685986;
+        poiController.update(obj._id, obj, function(err, result) {
+          if (err) throw new Error(err.message);
+          expect(result.code).to.be.equal(200);
+          done();
+        });
+      });
+
+      it('Should not found the object', function(done) {
+        poiController.update(randomId, obj, function(err) {
+          expect(err).not.to.be.null;
+          expect(err.message).to.be.equal('ID Not Found');
+          done();
+        });
+      });
+
+      it('Should not allow update for coordinates already in data base', function(done) {
+        poiController.update(obj._id, {nome: obj.nome, x: 27, y: 12}, function(err, result) {
+          expect(err).not.to.be.null;
+          expect(err.code).to.be.equal(400);
+          done();
+        });
+      });
+  }); //Close describe for updates
+
+  describe("#removes", function() {
+    it('Should successfully removes the object', function(done) {
+      poiController.remove(obj._id, function(err, result) {
+        if (err) throw new Error(err.message);
+        expect(result.code).to.be.equal(200);
+        done();
+      });
+    });
+
+    it('Should not found the object', function(done) {
+      poiController.remove(randomId, function(err) {
+        expect(err).not.to.be.null;
+        expect(err.message).to.be.equal('ID Not Found');
+        done();
+      });
+    });
+  }); //Close descrive for removes  
 }); //Close describe Controller
