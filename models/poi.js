@@ -40,7 +40,7 @@ schema.statics.getPois = function(obj, callback) {
       var nX = Math.abs(obj.x - el.x);
       var nY = Math.abs(obj.y - el.y);
       return (nX + nY) <= obj.dmax;
-    }).map(e => e.nome); //Returns only the name of each point
+    });//.map(e => e.nome); //Returns only the name of each point
     callback(null, response);
   });
 };
@@ -50,6 +50,10 @@ schema.statics.getPois = function(obj, callback) {
   Safer than Model.update for mongoose.
 */
 schema.statics.secureUpdate = function(id, newPoi, callback) {
+  /* Other way to do it. Useful for small objects
+    this.update({_id: id}, {nome: newPoi.nome, x: newPoi.x, y: newPoi.y},
+    function(err, poi) {
+  */
   this.findOne()
   .where({_id: id})
   .exec(function(err, poi) {

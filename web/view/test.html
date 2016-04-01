@@ -1,0 +1,97 @@
+<h2>Teste da aplicação</h2><hr>
+
+<div class="alert alert-danger" ng-if="apiError">
+  <a href="" class="close" data-dismiss="alert" aria-label="close" ng-click="closeErr()">&times;</a>
+  <strong>Erro!</strong> {{apiError}}.
+</div>
+
+<form role="form">
+  <h4>Inserir um novo ponto</h4>
+  <div class="row">
+    <div class="col-md-4">
+      <input class="form-control" id="nome" type="text"  placeholder="Insira um nome" ng-model="poi.nome" required>
+    </div>
+    <div class="col-md-3">
+      <input class="form-control" id="x" type="number" min="0" placeholder="Coordenada X" ng-model="poi.x" required>
+    </div>
+    <div class="col-md-3">
+      <input class="form-control" id="y" type="number" name="y" min="0" placeholder="Coordenada Y" ng-model="poi.y" required>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-success" type="submit" name="button" ng-click="savePoi()"> Salvar </button>
+    </div>
+  </div>
+</form>
+
+<hr>
+<h4>Pontos existentes</h4>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <td> Nome </td>
+        <td> X </td>
+        <td> Y </td>
+        <td> Ação </td>
+      </tr>
+    </thead>
+    <tbody>
+       <tr ng-repeat="poi in pois">
+        <td>{{poi.nome}}</td>
+        <td>{{poi.x}}</td>
+        <td>{{poi.y}}</td>
+        <td>
+          <small> <a href="" ng-click="updatePoi(poi)" data-toggle="tooltip" title="Editar"> <i class="fa fa-pencil-square-o fa-lg"></i></a></small>
+          <small> <a href="" ng-click="removePoi(poi)" data-toggle="tooltip" title="Excluir"><i class="fa fa-trash fa-lg"></i></a></small>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr>
+<h4>Buscar pontos próximos</h4>
+<form role="form">
+  <div class="row">
+    <div class="col-md-3">
+      <input class="form-control" id="x" type="number" min="0" placeholder="Coordenada X" ng-model="p.x" required>
+    </div>
+    <div class="col-md-3">
+      <input class="form-control" id="y" type="number" name="y" min="0" placeholder="Coordenada Y" ng-model="p.y" required>
+    </div>
+    <div class="col-md-4">
+      <input class="form-control" id="y" type="number" name="y" min="0" placeholder="Distância Máxima" ng-model="p.dmax" required>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-success" type="submit" name="button" ng-click="search()"> Buscar </button>
+    </div>
+  </div>
+</form>
+
+<hr>
+<div class="table-responsive">
+<h4>Pontos Próximos</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <td> Nome </td>
+        <td> X </td>
+        <td> Y </td>
+        <td> Ação </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="poi in foundPois">
+       <td>{{poi.nome}}</td>
+       <td>{{poi.x}}</td>
+       <td>{{poi.y}}</td>
+       <td>
+         <small> <a href="" ng-click="updatePoi(poi)" data-toggle="tooltip" title="Editar"> <i class="fa fa-pencil-square-o fa-lg"></i></a></small>
+         <small> <a href="" ng-click="removePoi(poi)" data-toggle="tooltip" title="Excluir"> <i class="fa fa-trash fa-lg"></i></a></small>
+       </td>
+     </tr>
+    </tbody>
+  </table>
+</div>
+
+<button class="btn btn-error" type="button" name="button" ng-click="clear()">Limpar</button>

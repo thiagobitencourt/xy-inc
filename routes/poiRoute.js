@@ -24,7 +24,8 @@ var setRoutes = function(){
 		var _callback = function(err, result) {
 			var code = err ? err.code : result.code;
 			var message = err ? err.message : result.message;
-			console.log(code + ": " + message);
+			if (err)
+				console.log(code + ": " + message);
 			return _res.status(code).send(message);
 		};
 		return {

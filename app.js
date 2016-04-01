@@ -31,6 +31,7 @@ mongoose.connect(uri, null, function(err){
     next();
   });
 
+	app.use('/', express.static(__dirname + '/web'));
 	//Load all Available routes, under /api path
   app.use('/api', new LoadRouter());
 	//Start server

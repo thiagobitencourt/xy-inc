@@ -33,3 +33,6 @@ $ cd xy-inc
 $ npm test
 $ npm start
 ```
+
+### Documentação e Teste
+Abra o navegador e acesse http://localhost:8000/
