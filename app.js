@@ -6,7 +6,7 @@
 		Returns all the POIs from the data base that are in a distance minor or equal of d-max from the reference point.
 */
 'use strict';
-global.__base = __dirname + '/';
+global.__base = __dirname + '/server/';
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');

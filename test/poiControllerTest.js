@@ -1,5 +1,5 @@
 'use strict';
-global.__base = '../';
+global.__base = __dirname + '/../server/';
 
 var mongoose = require( 'mongoose' );
 var expect = require('chai').expect;
@@ -182,5 +182,5 @@ describe("poiController", function() {
         done();
       });
     });
-  }); //Close descrive for removes  
+  }); //Close descrive for removes
 }); //Close describe Controller
