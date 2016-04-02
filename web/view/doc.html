@@ -1,1 +1,147 @@
 <h2>Documentação</h2>
+
+  <h5>INDEX</h5>
+  <ol>
+    <li><a ng-click="scrollTo('descricao')">Descrição</a></li>
+    <li><a ng-click="scrollTo('exemplo')">Exemplo</a></li>
+    <li><a ng-click="scrollTo('versao')">Versão</a></li>
+    <li><a ng-click="scrollTo('requisitos')">Requisitos</a></li>
+    <li><a ng-click="scrollTo('instalacao')">Instalação</a></li>
+    <li><a ng-click="scrollTo('documentacao')">Documentação e Testes</a></li>
+    <li><a ng-click="scrollTo('utilizacao')">Utilização</a>
+      <ul>
+        <li><a ng-click="scrollTo('parametros')">Parametros</a></li>
+      </ul>
+    </li>
+  </ol>
+
+  <br>
+  <h3 id="descricao">Descrição</h3>
+  <p align="justify">
+  Plataforma que fornece serviço para auxiliar pessoas na localização de ponto de interesse (POIs).
+  O serviço recebe uma coordenada X e uma coordenada Y, especificando um ponto de referência, bem como uma distância máxima (dmax) em metros.
+  O serviço retorna todos os POIs da base de dados que estejam a uma distância menor ou igual a dmax a partir do ponto de referência.
+  </p>
+  <br>
+  <h3 id="exemplo">Exemplo</h3>
+  <span>Dados:</span>
+  <ul>
+    <li>'Lanchonete' (x=27, y=12)</li>
+    <li>'Posto' (x=31, y=18)</li>
+    <li>'Joalheria' (x=15, y=12)</li>
+    <li>'Floricultura' (x=19, y=21)</li>
+    <li>'Pub' (x=12, y=8)</li>
+    <li>'Supermercado' (x=23, y=6)</li>
+    <li>'Churrascaria' (x=28, y=2)</li>
+  </ul>
+
+  <p>Dado o ponto de referência (x=20, y=10) indicado pelo receptor GPS, e uma distância máxima de 10 metros, o serviço retorna os seguintes POIs:</p>
+
+  <ul>
+    <li>Lanchonete</li>
+    <li>Joalheria</li>
+    <li>Pub</li>
+    <li>Supermercado</li>
+  </ul>
+  <br><h3 id="versao">Versão</h3>
+
+  <p>1.0.0</p>
+
+  <br><h3 id="requisitos">Requisitos</h3>
+    <ul>
+      <li>MongoDB &gt;= v3.0.1</li>
+      <li>NodeJS &gt;= v4.2.2</li>
+      <li>Npm &gt;= v2.14.7</li>
+    </ul>
+
+  <br><h3 id="instalacao">Instalação</h3>
+    <pre>
+      $ git clone <a href="https://github.com/thiagobitencourt/xy-inc" target="_blank"> https://github.com/thiagobitencourt/xy-inc</a>
+      $ cd xy-inc
+      $ npm test
+      $ npm start
+    </pre>
+  <br><h3 id="documentacao">Documentação e Teste</h3>
+    <p>Abra o navegador e acesse <a href="http://localhost:8000/" target="_blank">http://localhost:8000/</a></p>
+
+  <br><h3 id="utilizacao">Utilização</h3>
+    <div class="">
+      <div class="row">
+          <div class="col-md-4">
+            <h5><strong>Rotas:</strong></h5>
+            <p style="margin-left: 1em;"> /api/poi </p>
+          </div>
+          <div class="col-md-4">
+            <h5><strong>Métodos</strong></h5>
+            <span class="mylabel label label-success"> GET </span>
+            <span class="mylabel label label-primary"> POST </span>
+            <span class="mylabel label label-warning"> PUT </span>
+            <span class="mylabel label label-danger"> DELETE </span>
+          </div>
+          <div class="col-md-4">
+            <h5><strong>Tipo</strong></h5>
+            <span class="text-danger">JSON(application/json)</span>
+          </div>
+      </div>
+    </div>
+    <br>
+    <div>
+      <h4> Objeto exemplo <span class="mylabel label label-primary">POST</span> </h4>
+      <pre>
+        {
+          "nome": "Panificadora",
+          "x": 19,
+          "y": 44
+        }
+      </pre>
+      <br>
+      <h4> Objecto exemplo <span class="mylabel label label-success">GET</span></h4>
+      <pre>
+        {
+          "nome": "Panificadora",
+          "x": 19,
+          "y": 44,
+          "_id": "56ff08c140e07a271c256140"
+        }
+      </pre>
+    </div>
+    <br>
+    <div>
+      <h4 id="parametros">Parâmetros</h4>
+      <div class="row">
+        <div class="col-md-4">
+          <h5><strong>Método</strong></h5>
+            <p class="text-success"><strong>GET</strong></p>
+            <p class="text-success"><strong>GET</strong></p>
+            <p class="text-success"><strong>GET</strong></p>
+            <p class="text-success"><strong>GET</strong></p>
+            <p class="text-warning"><strong>PUT</strong></p>
+            <p class="text-danger"><strong>DELETE</strong></p>
+        </div>
+        <div class="col-md-2">
+          <h5><strong>Parâmetro</strong></h5>
+            <p>x</p>
+            <p>y</p>
+            <p>dmax</p>
+            <p>/:id</p>
+            <p>/:id</p>
+            <p>/:id</p>
+        </div>
+        <div class="col-md-6">
+          <h5><strong>Descrição</strong></h5>
+            <p>Coordenada X <small>[1]</small></p>
+            <p>Coordenada Y <small>[1]</small></p>
+            <p>Distância máxima <small>[1]</small></p>
+            <p>Requisita apenas um objeto específico</p>
+            <p>Objecto a ser alterada</p>
+            <p>Objecto a ser removido</p>
+        </div>
+        <p class="text-danger">[1] Quando passados como parâmetro, todas devem estar presente</p>
+      </div>
+      <br>
+      <div>
+        <h5>Exemplo: </h5>
+        <pre> <a href="http://localhost:8000/api/poi?x=20&y=10&dmax=10" target="_blank">http://localhost:8000/api/poi?x=20&y=10&dmax=10</a></pre>
+        <br>
+      </div>
+    </div>
